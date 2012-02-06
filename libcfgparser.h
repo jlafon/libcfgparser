@@ -1,5 +1,5 @@
 #include <regex.h>
-#include "uthash.h"
+#include "src/uthash.h"
 
 #define CFGPARSER_MAX_LINE 2048
 

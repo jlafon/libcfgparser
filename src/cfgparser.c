@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <regex.h>
 #include <string.h>
-#include "cfgparser.h"
+#include "libcfgparser.h"
 #include "uthash.h"
 
 /* Regex patterns for matching cfg file parts */
@@ -31,18 +31,17 @@ int
 _compile_patterns( cfgparser_context_t * context )
 {
     int status;
-    regex_t * current;
-    if( status = regcomp( &context->comment_pattern, CFGPARSER_COMMENT_PATTERN, 0 ) != 0 )
+    if( ( status = regcomp( &context->comment_pattern, CFGPARSER_COMMENT_PATTERN, 0 ) ) != 0 )
     {
         _print_regex_error( &context->comment_pattern, status );
         goto error;
     }
-    if( status = regcomp( &context->section_pattern, CFGPARSER_SECTION_PATTERN, 0 ) != 0 )
+    if( ( status = regcomp( &context->section_pattern, CFGPARSER_SECTION_PATTERN, 0 ) ) != 0 )
     {
         _print_regex_error( &context->section_pattern, status );
         goto error;
     }
-    if( status = regcomp( &context->value_pattern, CFGPARSER_VALUE_PATTERN, 0 )     != 0 )
+    if( ( status = regcomp( &context->value_pattern, CFGPARSER_VALUE_PATTERN, 0 ) )     != 0 )
     {
         _print_regex_error( &context->value_pattern, status );
         goto error;
@@ -75,7 +74,7 @@ _match_value( char * line, char * key, char * value, cfgparser_context_t * conte
 
 /* Try and match a comment */
 int 
-_match_comment( char * line, char * section, cfgparser_context_t * context )
+_match_comment( char * line, cfgparser_context_t * context )
 {
     regmatch_t match;
     int len = strlen( line );
@@ -181,7 +180,7 @@ cfgparser_load_file( char * file, cfgparser_context_t * context )
     }
     while( NULL != fgets( line, CFGPARSER_MAX_LINE, config_file ) )
     {
-        if( _match_comment( line, section, context ) )
+        if( _match_comment( line, context ) )
             continue;
         else if( _match_section( line, section, context ) )
         {
