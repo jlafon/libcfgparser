@@ -153,8 +153,8 @@ int cfgparser_get_str( char * section, char * key, char * value, cfgparser_conte
         if( len > CFGPARSER_MAX_LINE )
             goto false;
         strcpy( value, val->value );
+        return 1;
     }
-    return 1;
 false:
     return 0;
 }
